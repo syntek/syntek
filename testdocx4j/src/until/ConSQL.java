@@ -15,21 +15,18 @@ import java.util.logging.Logger;
  * @author ABC
  */
 public class ConSQL {
-
+        public static Connection con = null;
     public static Connection getConnection() {
-        Connection con = null;
+        
         try {
             String url = "jdbc:sqlserver://localhost:1433;databaseName=syntek";
             String user = "sa";
-            String pass = "123456";
+            String pass = "1234$";
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             con = DriverManager.getConnection(url, user, pass);
         } catch (Exception ex) {
             Logger.getLogger(ConSQL.class.getName()).log(Level.SEVERE, null, ex);
         }
         return con;
-    }
-    public static void main(String[] args) {
-        getConnection();
     }
 }

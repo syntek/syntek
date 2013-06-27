@@ -20,13 +20,14 @@ import until.ConSQL;
  *
  * @author ABC
  */
-public class NewJFrame extends javax.swing.JFrame {
+public class formMain extends javax.swing.JFrame {
 
     /**
-     * Creates new form NewJFrame
+     * Creates new form formMain
      */
-    public NewJFrame() {
+    public formMain() {
         initComponents();
+        ConSQL.getConnection();
         loadListFile();
     }
 
@@ -36,7 +37,7 @@ public class NewJFrame extends javax.swing.JFrame {
     public void loadListFile() {
         try {
             String sql = "SELECT title from VANBAN";
-            CallableStatement cs = ConSQL.getConnection().prepareCall(sql);
+            CallableStatement cs = ConSQL.con.prepareCall(sql);
             ResultSet rs = cs.executeQuery();
             DefaultListModel defaultListModel = new DefaultListModel();
             while (rs.next()) {
@@ -44,7 +45,7 @@ public class NewJFrame extends javax.swing.JFrame {
             }
             listFile.setModel(defaultListModel);
         } catch (SQLException ex) {
-            Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(formMain.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -52,13 +53,13 @@ public class NewJFrame extends javax.swing.JFrame {
         String id = "";
         try {
             String sql = "SELECT id from VANBAN WHERE title = N'" + title + "'";
-            CallableStatement cs = ConSQL.getConnection().prepareCall(sql);
+            CallableStatement cs = ConSQL.con.prepareCall(sql);
             ResultSet rs = cs.executeQuery();
             while (rs.next()) {
                 id = rs.getString(1);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(formMain.class.getName()).log(Level.SEVERE, null, ex);
         }
         return id;
     }
@@ -66,7 +67,7 @@ public class NewJFrame extends javax.swing.JFrame {
     public void updateDataTable(String id) {
         try {
             String sql = "SELECT filename, URL, pagenumber from ListFile WHERE idVanBan =" + id;
-            CallableStatement cs = ConSQL.getConnection().prepareCall(sql);
+            CallableStatement cs = ConSQL.con.prepareCall(sql);
             ResultSet rs = cs.executeQuery();
             DefaultTableModel defaultTableModel = new DefaultTableModel();
             
@@ -85,7 +86,7 @@ public class NewJFrame extends javax.swing.JFrame {
             }
             tblListFile.setModel(defaultTableModel);
         } catch (SQLException ex) {
-            Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(formMain.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -105,11 +106,6 @@ public class NewJFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        listFile.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Văn bản 1 ", "Văn bản 2", "Văn bản 3", "Văn bản 4" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
         listFile.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 listFileMouseClicked(evt);
@@ -146,7 +142,7 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Sủa");
+        jButton2.setText("Sửa");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -212,9 +208,12 @@ public class NewJFrame extends javax.swing.JFrame {
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        Them them = new Them();
-        them.setVisible(true);
-        this.setVisible(false);
+//        Them them = new Them();
+//        them.setVisible(true);
+//        this.setVisible(false);
+        DialogThemFile dialog = new DialogThemFile(this, true);
+        dialog.setVisible(true);
+        loadListFile();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -234,20 +233,20 @@ public class NewJFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new NewJFrame().setVisible(true);
+                new formMain().setVisible(true);
             }
         });
     }
