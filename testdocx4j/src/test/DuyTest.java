@@ -23,6 +23,7 @@ import org.docx4j.wml.Document;
 public class DuyTest {
 
     static int dem = 1;
+    static String current = "";
 
     static void tangDem() {
         dem++;
@@ -41,7 +42,7 @@ public class DuyTest {
 
             TraversalUtil util = new TraversalUtil(body, new TraversalUtil.Callback() {
                 String indent = "";
-String current="";
+
                 @Override
                 public void walkJAXBElements(Object parent) {
                     indent += "    ";
@@ -72,19 +73,17 @@ String current="";
                     }
                     System.out.println(indent + o.getClass().getName() + "  \""
                             + text + "\"");
-                    if  (o instanceof org.docx4j.wml.R.LastRenderedPageBreak)
-                    {
-                        current="Last";
-                        System.out.println("this is "+current);
+                    if (o instanceof org.docx4j.wml.R.LastRenderedPageBreak) {
+                        current = "Last";
+                        System.out.println("this is " + current);
                         tangDem();
                     }
-                    if  (o instanceof org.docx4j.wml.Br)
-                    {
-                        current="Br";
-                        System.out.println("this is "+current);
+                    if (o instanceof org.docx4j.wml.Br) {
+                        current = "Br";
+                        System.out.println("this is " + current);
                         tangDem();
                     }
-                        return null;
+                    return null;
                 }
 
                 @Override
@@ -92,8 +91,10 @@ String current="";
                     return true;
                 }
             });
-            
-            
+            if (current.equals("Br")) {
+                giamDem();
+            }
+            System.out.println(dem);
         } catch (Docx4JException ex) {
             Logger.getLogger(DuyTest.class.getName()).log(Level.SEVERE, null, ex);
         }
